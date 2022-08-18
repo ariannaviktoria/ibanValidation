@@ -1,22 +1,12 @@
 import java.math.BigInteger;
 
 public class CheckIbanValidity {
-    // TODO renunta la campuri, trimitele ca si parametrii catre metodele interne
-    private String ibanWithoutSpaces;
-    private String numberString;
 
-    // TODO sterge consrtuctorul asta si defineste clasa ca fiind statica
-    public CheckIbanValidity(String ibanWithoutSpaces) {
-        this.ibanWithoutSpaces = ibanWithoutSpaces;
-    }
-
-    private boolean isCorrectLength() {
-        // TODO metoda asta face mai multe decat descrie numele ei, muta prelucrarea in alta metoda sau in metoda principala
-        ibanWithoutSpaces = ibanWithoutSpaces.replaceAll(" ","");
-        ibanWithoutSpaces = ibanWithoutSpaces.toUpperCase();
+    //TODO am o singura intrebare, toate celelalte todo-urile cred ca am facut, dar nu inteleg daca si outer class adica CheckIbanValidity ar trebui sa fie static sau doar inner classes?
+    private static boolean isCorrectLength(String ibanWithoutSpaces) {
         return (ibanWithoutSpaces.length() >= 15 && ibanWithoutSpaces.length() <= 32 && ibanWithoutSpaces.length() != 17);
     }
-    private void whichCountry(String originalIban){
+    private static void whichCountry(String originalIban){
         String firstTwoLetter = originalIban.substring(0,2);
         switch (firstTwoLetter) {
             case "AL" -> System.out.print("The IBAN is from Albania ");
@@ -102,16 +92,18 @@ public class CheckIbanValidity {
         }
 
     }
-    private void rearrange() {
+    private static String rearrange(String ibanWithoutSpaces) {
         for (int i = 0; i < 4; i++) {
             char firstChar = ibanWithoutSpaces.charAt(0);
             ibanWithoutSpaces = ibanWithoutSpaces.substring(1);
             String toEnd = Character.toString(firstChar);
             ibanWithoutSpaces = ibanWithoutSpaces.concat(toEnd);
         }
+        return ibanWithoutSpaces;
     }
 
-    private void convertLettersToNumbers() {
+    private static String convertLettersToNumbers(String ibanWithoutSpaces) {
+        String numberString;
         int length = ibanWithoutSpaces.length();
         for (int i = 0; i < length; i++) {
             char currentChar = ibanWithoutSpaces.charAt(i);
@@ -124,27 +116,25 @@ public class CheckIbanValidity {
                 ibanWithoutSpaces = numberString;
             }
         }
+        return ibanWithoutSpaces;
     }
 
-    private boolean integerModuloIfValid() {
-        BigInteger ibanAsInteger = new BigInteger(numberString);
+    private static boolean integerModuloIfValid(String ibanWithoutSpaces) {
+        BigInteger ibanAsInteger = new BigInteger(ibanWithoutSpaces);
         BigInteger modulo = new BigInteger("97");
         BigInteger result = ibanAsInteger.mod(modulo);
         BigInteger one = new BigInteger("1");
         return result.equals(one);
     }
-    public boolean CheckValidity() throws IncorrectLengthException, IncorrectIbanAfterModuloException {
-        // TODO method names should start with a small letter
-        // TODO propun sa faci aceasta metoda statica si sa definesti ibanul ce trebuie verificat ca si parametru (renunta la constructor si fielduri)
-        if(!isCorrectLength()){
+    public static boolean checkValidity(String ibanWithoutSpaces) throws IncorrectLengthException, IncorrectIbanAfterModuloException {
+        ibanWithoutSpaces = ibanWithoutSpaces.replaceAll(" ","");
+        ibanWithoutSpaces = ibanWithoutSpaces.toUpperCase();
+        if(!isCorrectLength(ibanWithoutSpaces)){
             throw new IncorrectLengthException("Incorrect length, so the IBAN is invalid.");
         }
         else{
-            String saveIban = ibanWithoutSpaces;
-            rearrange();
-            convertLettersToNumbers();
-            if(integerModuloIfValid()){
-                whichCountry(saveIban);
+            if(integerModuloIfValid(convertLettersToNumbers(rearrange(ibanWithoutSpaces)))){
+                whichCountry(ibanWithoutSpaces);
                 System.out.print("and the IBAN is valid.\n");
                 return true;
             }
