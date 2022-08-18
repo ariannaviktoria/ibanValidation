@@ -1,5 +1,6 @@
 import java.io.*;
 
+// TODO poti sterge clasa asta, in practica nu este folosita aproape niciodata
 public class Main {
     private static String originalIBAN;
 

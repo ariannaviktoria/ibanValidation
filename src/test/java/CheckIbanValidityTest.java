@@ -1,5 +1,4 @@
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CheckIbanValidityTest {
@@ -33,7 +32,8 @@ public class CheckIbanValidityTest {
     public void correctIban5() {
         var checkIbanValidity5 = new CheckIbanValidity("MD21EY000000000001234567");
         //assertFalse(checkIbanValidity5.CheckValidity());
-        assertThrows(IncorrectIbanAfterModuloException.class, checkIbanValidity5::CheckValidity);
+        //TODO verifica si mesajul exceptiei la testele negative te rog
+        assertThrows(IncorrectIbanAfterModuloException.class, checkIbanValidity5::CheckValidity, "mesaj");
     }
 
 

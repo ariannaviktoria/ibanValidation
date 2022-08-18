@@ -1,14 +1,17 @@
 import java.math.BigInteger;
 
 public class CheckIbanValidity {
+    // TODO renunta la campuri, trimitele ca si parametrii catre metodele interne
     private String ibanWithoutSpaces;
     private String numberString;
 
+    // TODO sterge consrtuctorul asta si defineste clasa ca fiind statica
     public CheckIbanValidity(String ibanWithoutSpaces) {
         this.ibanWithoutSpaces = ibanWithoutSpaces;
     }
 
     private boolean isCorrectLength() {
+        // TODO metoda asta face mai multe decat descrie numele ei, muta prelucrarea in alta metoda sau in metoda principala
         ibanWithoutSpaces = ibanWithoutSpaces.replaceAll(" ","");
         ibanWithoutSpaces = ibanWithoutSpaces.toUpperCase();
         return (ibanWithoutSpaces.length() >= 15 && ibanWithoutSpaces.length() <= 32 && ibanWithoutSpaces.length() != 17);
@@ -131,6 +134,8 @@ public class CheckIbanValidity {
         return result.equals(one);
     }
     public boolean CheckValidity() throws IncorrectLengthException, IncorrectIbanAfterModuloException {
+        // TODO method names should start with a small letter
+        // TODO propun sa faci aceasta metoda statica si sa definesti ibanul ce trebuie verificat ca si parametru (renunta la constructor si fielduri)
         if(!isCorrectLength()){
             throw new IncorrectLengthException("Incorrect length, so the IBAN is invalid.");
         }
